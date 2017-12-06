@@ -1,0 +1,1308 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "%matplotlib inline\n",
+    "import pandas as pd\n",
+    "import matplotlib.pyplot as plt\n",
+    "import matplotlib as mpl\n",
+    "import numpy as np\n",
+    "\n",
+    "import seaborn as sn\n",
+    "import sys  \n",
+    "reload(sys)  \n",
+    "sys.setdefaultencoding('utf8')\n",
+    "%pylab inline\n",
+    "\n",
+    "import folium\n",
+    "\n",
+    "data = pd.read_csv('easy3.csv')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style>\n",
+       "    .dataframe thead tr:only-child th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: left;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>PaName</th>\n",
+       "      <th>PrName</th>\n",
+       "      <th>PrAddress</th>\n",
+       "      <th>PrAddressNumber</th>\n",
+       "      <th>PrNeighborhood</th>\n",
+       "      <th>PrTown</th>\n",
+       "      <th>PrCEP</th>\n",
+       "      <th>PrState</th>\n",
+       "      <th>PrExperience</th>\n",
+       "      <th>PrCEP_Area</th>\n",
+       "      <th>...</th>\n",
+       "      <th>AtDataMonth</th>\n",
+       "      <th>AtDataYear</th>\n",
+       "      <th>AtIntercurrence</th>\n",
+       "      <th>AtArrival</th>\n",
+       "      <th>AtArrivalDay</th>\n",
+       "      <th>AtArrivalMonth</th>\n",
+       "      <th>AtArrivalYear</th>\n",
+       "      <th>AtArrivalHour</th>\n",
+       "      <th>AtArrivalMinutes</th>\n",
+       "      <th>AtEvolution</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>Rozimar Torres Ferreira</td>\n",
+       "      <td>David Ricardo da Silva Pereira</td>\n",
+       "      <td>Travessa Humaita - ate 1072/1073</td>\n",
+       "      <td>967</td>\n",
+       "      <td>Pedreira</td>\n",
+       "      <td>Belém</td>\n",
+       "      <td>66083-340</td>\n",
+       "      <td>PA</td>\n",
+       "      <td>Mais de 8 anos</td>\n",
+       "      <td>660</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>15/04/2017 20:30:00</td>\n",
+       "      <td>15.0</td>\n",
+       "      <td>4.0</td>\n",
+       "      <td>2017.0</td>\n",
+       "      <td>20.0</td>\n",
+       "      <td>30.0</td>\n",
+       "      <td>Em atendimento Dr. David informa que a pacient...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>Antenor Dametto</td>\n",
+       "      <td>Sueli Braga de Matos Andrade</td>\n",
+       "      <td>Rua Jamblico</td>\n",
+       "      <td>39</td>\n",
+       "      <td>Casa Verde Alta</td>\n",
+       "      <td>São Paulo</td>\n",
+       "      <td>02555-110</td>\n",
+       "      <td>SP</td>\n",
+       "      <td>5 - 8 anos</td>\n",
+       "      <td>025</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>09/05/2017 19:00:00</td>\n",
+       "      <td>9.0</td>\n",
+       "      <td>5.0</td>\n",
+       "      <td>2017.0</td>\n",
+       "      <td>19.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>PROF. REALIZOU PLANTÃO NOITE 30/04 E FEZ 24H\\n...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>Luzia Pacheco Souza Silva</td>\n",
+       "      <td>Vinicius Maniezo Garcia</td>\n",
+       "      <td>Rua Uruguai</td>\n",
+       "      <td>206</td>\n",
+       "      <td>Jardim das Americas</td>\n",
+       "      <td>São Simão</td>\n",
+       "      <td>14200-000</td>\n",
+       "      <td>SP</td>\n",
+       "      <td>2 - 5 anos</td>\n",
+       "      <td>142</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>07/07/2017 14:00:00</td>\n",
+       "      <td>7.0</td>\n",
+       "      <td>7.0</td>\n",
+       "      <td>2017.0</td>\n",
+       "      <td>14.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>Visita realizada dia 25/06, porém a data saiu ...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>Joaquim Ignacio de Souza Netto</td>\n",
+       "      <td>Marcelo Monteiro</td>\n",
+       "      <td>Rua Alcides de Paiva Monteiro</td>\n",
+       "      <td>128</td>\n",
+       "      <td>Jardim das Palmeiras</td>\n",
+       "      <td>São Paulo</td>\n",
+       "      <td>05883-250</td>\n",
+       "      <td>SP</td>\n",
+       "      <td>2 - 5 anos</td>\n",
+       "      <td>058</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>01/09/2017 16:00:00</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>9.0</td>\n",
+       "      <td>2017.0</td>\n",
+       "      <td>16.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>Atendimento realizado e confirmado</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>Gabriel Nardi Martins</td>\n",
+       "      <td>Thiago Henrique Fomino Hayashida</td>\n",
+       "      <td>Rua Lefosse</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>Vila Invernada</td>\n",
+       "      <td>São Paulo</td>\n",
+       "      <td>03349-015</td>\n",
+       "      <td>SP</td>\n",
+       "      <td>0 - 2 anos</td>\n",
+       "      <td>03300-000</td>\n",
+       "      <td>...</td>\n",
+       "      <td>3.0</td>\n",
+       "      <td>2016.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>01/03/2016 09:37:52</td>\n",
+       "      <td>1.0</td>\n",
+       "      <td>3.0</td>\n",
+       "      <td>2016.0</td>\n",
+       "      <td>9.0</td>\n",
+       "      <td>37.0</td>\n",
+       "      <td>Paciente acordado, BEG, eupneica em ar ambient...</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "<p>5 rows × 35 columns</p>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                           PaName                            PrName  \\\n",
+       "0        Rozimar Torres Ferreira    David Ricardo da Silva Pereira    \n",
+       "1                 Antenor Dametto      Sueli Braga de Matos Andrade   \n",
+       "2       Luzia Pacheco Souza Silva           Vinicius Maniezo Garcia   \n",
+       "3  Joaquim Ignacio de Souza Netto                  Marcelo Monteiro   \n",
+       "4           Gabriel Nardi Martins  Thiago Henrique Fomino Hayashida   \n",
+       "\n",
+       "                          PrAddress PrAddressNumber        PrNeighborhood  \\\n",
+       "0  Travessa Humaita - ate 1072/1073             967             Pedreira    \n",
+       "1                      Rua Jamblico              39       Casa Verde Alta   \n",
+       "2                       Rua Uruguai             206   Jardim das Americas   \n",
+       "3     Rua Alcides de Paiva Monteiro             128  Jardim das Palmeiras   \n",
+       "4                       Rua Lefosse             NaN        Vila Invernada   \n",
+       "\n",
+       "      PrTown      PrCEP PrState    PrExperience PrCEP_Area  \\\n",
+       "0      Belém  66083-340      PA  Mais de 8 anos        660   \n",
+       "1  São Paulo  02555-110      SP      5 - 8 anos        025   \n",
+       "2  São Simão  14200-000      SP      2 - 5 anos        142   \n",
+       "3  São Paulo  05883-250      SP      2 - 5 anos        058   \n",
+       "4  São Paulo  03349-015      SP      0 - 2 anos  03300-000   \n",
+       "\n",
+       "                         ...                         AtDataMonth AtDataYear  \\\n",
+       "0                        ...                                 0.0        0.0   \n",
+       "1                        ...                                 0.0        0.0   \n",
+       "2                        ...                                 0.0        0.0   \n",
+       "3                        ...                                 0.0        0.0   \n",
+       "4                        ...                                 3.0     2016.0   \n",
+       "\n",
+       "  AtIntercurrence            AtArrival AtArrivalDay AtArrivalMonth  \\\n",
+       "0             0.0  15/04/2017 20:30:00         15.0            4.0   \n",
+       "1             0.0  09/05/2017 19:00:00          9.0            5.0   \n",
+       "2             0.0  07/07/2017 14:00:00          7.0            7.0   \n",
+       "3             0.0  01/09/2017 16:00:00          1.0            9.0   \n",
+       "4             0.0  01/03/2016 09:37:52          1.0            3.0   \n",
+       "\n",
+       "  AtArrivalYear AtArrivalHour AtArrivalMinutes  \\\n",
+       "0        2017.0          20.0             30.0   \n",
+       "1        2017.0          19.0              0.0   \n",
+       "2        2017.0          14.0              0.0   \n",
+       "3        2017.0          16.0              0.0   \n",
+       "4        2016.0           9.0             37.0   \n",
+       "\n",
+       "                                         AtEvolution  \n",
+       "0  Em atendimento Dr. David informa que a pacient...  \n",
+       "1  PROF. REALIZOU PLANTÃO NOITE 30/04 E FEZ 24H\\n...  \n",
+       "2  Visita realizada dia 25/06, porém a data saiu ...  \n",
+       "3                 Atendimento realizado e confirmado  \n",
+       "4  Paciente acordado, BEG, eupneica em ar ambient...  \n",
+       "\n",
+       "[5 rows x 35 columns]"
+      ]
+     },
+     "execution_count": 11,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "data.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style>\n",
+       "    .dataframe thead tr:only-child th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: left;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th>AtIntercurrence</th>\n",
+       "      <th>0.0</th>\n",
+       "      <th>1.0</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>AtCategory</th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>Ambulância</th>\n",
+       "      <td>21.0</td>\n",
+       "      <td>NaN</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>Atendimento Externo</th>\n",
+       "      <td>9.0</td>\n",
+       "      <td>NaN</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>Enfermagem</th>\n",
+       "      <td>11545.0</td>\n",
+       "      <td>543.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>Exames</th>\n",
+       "      <td>8.0</td>\n",
+       "      <td>NaN</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>Fisioterapia</th>\n",
+       "      <td>51521.0</td>\n",
+       "      <td>1778.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>Fonoaudiologia</th>\n",
+       "      <td>12016.0</td>\n",
+       "      <td>853.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>Logística</th>\n",
+       "      <td>6.0</td>\n",
+       "      <td>NaN</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>Médico</th>\n",
+       "      <td>3402.0</td>\n",
+       "      <td>621.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>Nutricionista</th>\n",
+       "      <td>855.0</td>\n",
+       "      <td>43.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>Psicólogo</th>\n",
+       "      <td>244.0</td>\n",
+       "      <td>3.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>Terapeuta</th>\n",
+       "      <td>549.0</td>\n",
+       "      <td>1.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>Téc. Enfermagem</th>\n",
+       "      <td>85842.0</td>\n",
+       "      <td>1178.0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "AtIntercurrence          0.0     1.0\n",
+       "AtCategory                          \n",
+       "Ambulância              21.0     NaN\n",
+       "Atendimento Externo      9.0     NaN\n",
+       "Enfermagem           11545.0   543.0\n",
+       "Exames                   8.0     NaN\n",
+       "Fisioterapia         51521.0  1778.0\n",
+       "Fonoaudiologia       12016.0   853.0\n",
+       "Logística                6.0     NaN\n",
+       "Médico                3402.0   621.0\n",
+       "Nutricionista          855.0    43.0\n",
+       "Psicólogo              244.0     3.0\n",
+       "Terapeuta              549.0     1.0\n",
+       "Téc. Enfermagem      85842.0  1178.0"
+      ]
+     },
+     "execution_count": 12,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "data.groupby(['AtCategory','AtIntercurrence']).count().max(1).unstack()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "data.groupby(['AtSpecialty','AtIntercurrence']).count().max(1).unstack()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "data.groupby(['AtInsurance','AtIntercurrence']).count().max(1).unstack()Dprestige = pd.get_dummies(df.prestige, prefix='prestige')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Dcategory = pd.get_dummies(data.AtCategory, prefix='CAT_')\n",
+    "Dcategory.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "data['AtIntercurrence'].value_counts()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Dinsusanre = pd.get_dummies(data.AtInsurance, prefix='INS_')\n",
+    "Dinsusanre.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style>\n",
+       "    .dataframe thead tr:only-child th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: left;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>SPE__APH</th>\n",
+       "      <th>SPE__Aplicação de Medicamento</th>\n",
+       "      <th>SPE__Audição</th>\n",
+       "      <th>SPE__Cardiologista</th>\n",
+       "      <th>SPE__Clínica</th>\n",
+       "      <th>SPE__Clínico Geral</th>\n",
+       "      <th>SPE__Coleta Domiciliar</th>\n",
+       "      <th>SPE__Curativo</th>\n",
+       "      <th>SPE__Dermatologista</th>\n",
+       "      <th>SPE__Disfagia</th>\n",
+       "      <th>...</th>\n",
+       "      <th>SPE__Prontuário</th>\n",
+       "      <th>SPE__Psicólogo</th>\n",
+       "      <th>SPE__Psiquiatria</th>\n",
+       "      <th>SPE__Raio X - Radiografia</th>\n",
+       "      <th>SPE__Respiratória</th>\n",
+       "      <th>SPE__Simples IDA</th>\n",
+       "      <th>SPE__Simples IDA e VOLTA</th>\n",
+       "      <th>SPE__Terapeuta Ocupacional</th>\n",
+       "      <th>SPE__UTI IDA</th>\n",
+       "      <th>SPE__Voz</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "<p>5 rows × 41 columns</p>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   SPE__APH  SPE__Aplicação de Medicamento  SPE__Audição  SPE__Cardiologista  \\\n",
+       "0         0                              0             0                   0   \n",
+       "1         0                              0             0                   0   \n",
+       "2         0                              0             0                   0   \n",
+       "3         0                              0             0                   0   \n",
+       "4         0                              0             0                   0   \n",
+       "\n",
+       "   SPE__Clínica  SPE__Clínico Geral  SPE__Coleta Domiciliar  SPE__Curativo  \\\n",
+       "0             0                   1                       0              0   \n",
+       "1             0                   0                       0              0   \n",
+       "2             0                   0                       0              0   \n",
+       "3             0                   0                       0              0   \n",
+       "4             0                   0                       0              0   \n",
+       "\n",
+       "   SPE__Dermatologista  SPE__Disfagia    ...     SPE__Prontuário  \\\n",
+       "0                    0              0    ...                   0   \n",
+       "1                    0              0    ...                   0   \n",
+       "2                    0              0    ...                   0   \n",
+       "3                    0              0    ...                   0   \n",
+       "4                    0              0    ...                   0   \n",
+       "\n",
+       "   SPE__Psicólogo  SPE__Psiquiatria  SPE__Raio X - Radiografia  \\\n",
+       "0               0                 0                          0   \n",
+       "1               0                 0                          0   \n",
+       "2               0                 0                          0   \n",
+       "3               0                 0                          0   \n",
+       "4               0                 0                          0   \n",
+       "\n",
+       "   SPE__Respiratória  SPE__Simples IDA  SPE__Simples IDA e VOLTA  \\\n",
+       "0                  0                 0                         0   \n",
+       "1                  0                 0                         0   \n",
+       "2                  0                 0                         0   \n",
+       "3                  0                 0                         0   \n",
+       "4                  1                 0                         0   \n",
+       "\n",
+       "   SPE__Terapeuta Ocupacional  SPE__UTI IDA  SPE__Voz  \n",
+       "0                           0             0         0  \n",
+       "1                           0             0         0  \n",
+       "2                           0             0         0  \n",
+       "3                           0             0         0  \n",
+       "4                           0             0         0  \n",
+       "\n",
+       "[5 rows x 41 columns]"
+      ]
+     },
+     "execution_count": 18,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "Dspecialty = pd.get_dummies(data.AtSpecialty, prefix='SPE_')\n",
+    "Dspecialty.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "data.AtLatitude = data['AtLatitude'].fillna('0')\n",
+    "data.AtLongitude = data['AtLongitude'].fillna('0')\n",
+    "data.AtIntercurrence = data['AtIntercurrence'].fillna('0')\n",
+    "data.AtEvolution = data['AtEvolution'].fillna('')\n",
+    "\n",
+    "data.AtIntercurrence = data['AtIntercurrence'].astype('float') \n",
+    "data.AtLatitude = data['AtLatitude'].astype('float') \n",
+    "data.AtLongitude = data['AtLongitude'].astype('float') "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "application/vnd.jupyter.widget-view+json": {
+       "model_id": "f88f305fa6304b1dae3271e4952d9df9",
+       "version_major": 2,
+       "version_minor": 0
+      },
+      "text/html": [
+       "<p>Failed to display Jupyter Widget of type <code>Figure</code>.</p>\n",
+       "<p>\n",
+       "  If you're reading this message in Jupyter Notebook or JupyterLab, it may mean\n",
+       "  that the widgets JavaScript is still loading. If this message persists, it\n",
+       "  likely means that the widgets JavaScript library is either not installed or\n",
+       "  not enabled. See the <a href=\"https://ipywidgets.readthedocs.io/en/stable/user_install.html\">Jupyter\n",
+       "  Widgets Documentation</a> for setup instructions.\n",
+       "</p>\n",
+       "<p>\n",
+       "  If you're reading this message in another notebook frontend (for example, a static\n",
+       "  rendering on GitHub or <a href=\"https://nbviewer.jupyter.org/\">NBViewer</a>),\n",
+       "  it may mean that your frontend doesn't currently support widgets.\n",
+       "</p>\n"
+      ],
+      "text/plain": [
+       "Figure()"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "# # https://github.com/pbugnion/gmaps\n",
+    "import gmaps\n",
+    "import gmaps.datasets\n",
+    "gmaps.configure(api_key=\"AIzaSyCZ3ZKvIg9vvAGXsC6OCaFVu84lg9IubKQ\")\n",
+    "\n",
+    "locations = data[['AtLatitude',\"AtLongitude\"]]\n",
+    "\n",
+    "fig = gmaps.figure()\n",
+    "heatmap_layer = gmaps.heatmap_layer(locations)\n",
+    "heatmap_layer.max_intensity = 100\n",
+    "heatmap_layer.point_radius = 5\n",
+    "fig.add_layer(heatmap_layer)\n",
+    "fig"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 35,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "PaName                   0\n",
+       "PrName                  97\n",
+       "PrAddress              247\n",
+       "PrAddressNumber       4948\n",
+       "PrNeighborhood         791\n",
+       "PrTown                 175\n",
+       "PrCEP                  669\n",
+       "PrState                266\n",
+       "PrExperience            97\n",
+       "PrCEP_Area            1428\n",
+       "PrCEP_End           112155\n",
+       "AtInsurance              1\n",
+       "AtSpecialty              1\n",
+       "AtCategory               1\n",
+       "AtStatus                 1\n",
+       "AtAddress              204\n",
+       "AtAddressNumber        124\n",
+       "AtNeighborhood         347\n",
+       "AtTown                   6\n",
+       "AtCEP                   69\n",
+       "AtState                  5\n",
+       "AtLatitude               0\n",
+       "AtLongitude              0\n",
+       "AtData                   1\n",
+       "AtDataDay                1\n",
+       "AtDataMonth              1\n",
+       "AtDataYear               1\n",
+       "AtIntercurrence          0\n",
+       "AtArrival               20\n",
+       "AtArrivalDay            20\n",
+       "AtArrivalMonth          20\n",
+       "AtArrivalYear           20\n",
+       "AtArrivalHour           20\n",
+       "AtArrivalMinutes        20\n",
+       "AtEvolution              0\n",
+       "dtype: int64"
+      ]
+     },
+     "execution_count": 35,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "data.isnull().sum()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 68,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "PrName\n",
+       " ALCILEIA PRATES FERNANDES                       141\n",
+       " ANTONIA DELVANIA DA SILVA                        33\n",
+       " Claudete de Lima Xavier                          53\n",
+       " EDVALDO SOARES ARAUJO                           103\n",
+       " Edna Marileia Sant’Ana Molnar                     1\n",
+       " Fabiana Simone da Silveira                       57\n",
+       " Felipe Novais Silva Ribeiro                     296\n",
+       " Fernanda Kimie Guimaraes de Andrade              73\n",
+       " Fernando Ferreira Lima                            3\n",
+       " Iruska Nascimento Nogueira                        6\n",
+       " Jania Ventura Gouveia Santos                      4\n",
+       " Lucia Alves Moraes                                1\n",
+       " Maria Jose das Neves Barbosa                      8\n",
+       " Mary Ellen dos Santos                            12\n",
+       " Milena Pagotto Salerno                           86\n",
+       " Nayara Assis Miranda                              3\n",
+       " Rafael Dias Bacchiega                             4\n",
+       " Rosa Aparecida de Moura Pedraza                   2\n",
+       " Talitha Guimaraes D angelo Quirino               95\n",
+       " Tania De Souza                                  119\n",
+       " Viviane da Silva Brito                            2\n",
+       " Ângela Vicente da Silva                          44\n",
+       "(INATIVO)Helica Martins Francisco dos Santos     132\n",
+       "ABRAAO LEONARDO DA SILVA                           5\n",
+       "ADELIA CRISTINA DOS SANTOS                        20\n",
+       "ADRIANA APARECIDA SARTORIO                        56\n",
+       "ADRIANA DO NASCIMENTO DIOGO                        3\n",
+       "ADRIANA FRAGOSO DE CARVALHO                        2\n",
+       "ADRIANA ISILDA SERRA VASCONCELOS                  24\n",
+       "ADRIANA LOURENCO CORREA                           15\n",
+       "                                                ... \n",
+       "Wallace Dorneles Gomes                             1\n",
+       "Wallas Batista da Silva                            3\n",
+       "Walmar Miranda                                   106\n",
+       "Washington Ruben Toledo Valverde                   8\n",
+       "Weber dos Santos Matos                             2\n",
+       "Webert Clauzio Soares                              2\n",
+       "Welington Sena de Jesus                           38\n",
+       "Weslei Oliveira Viana                           1008\n",
+       "Wesley da Silva Sousa                             48\n",
+       "Wilkiliana Azevedo dos Santos                      1\n",
+       "William Sena da Silva                            738\n",
+       "William Vanzolini de Oliveira                     11\n",
+       "William Wilkens Helrigle                           3\n",
+       "Willian Jadson Goncalves do Nascimento             3\n",
+       "Willian Martins Julio                              2\n",
+       "Willian Patrik Ribeiro Costa                      27\n",
+       "Wilma Muriele Silva Costa                          1\n",
+       "Wilson de Jesus Bonifacio                        190\n",
+       "Xenia Morgana Santos Souza                         3\n",
+       "YASMIN CAROLINE CUSTODIO GERONIMO                 13\n",
+       "ZILDA BARBOSA DE OLIVEIRA                         22\n",
+       "ZILDA JOSE DA SILVA                               18\n",
+       "ZILMA MARIA DE LIMA                               35\n",
+       "Zenaide Faria Soares Ganda                         6\n",
+       "ana monteiro                                       2\n",
+       "doraci garcez da silveira                          1\n",
+       "luciano moreira dos santos souza                  11\n",
+       "Ângela Moura de Quevedo                            2\n",
+       "Érica Maria de Moraes Della Vecchia Ribas          2\n",
+       "Érika Regina Coelho                               18\n",
+       "Name: PrName, Length: 2406, dtype: int64"
+      ]
+     },
+     "execution_count": 68,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "data[\"PrName\"].groupby(data.PrName).count()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "data[\"PaName\"].groupby(data.PaName).count()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "data[data.AtIntercurrence==1][\"AtEvolution\"].head"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    " data.groupby([\"AtCategory\"])[[\"AtIntercurrence\"]].mean()\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    " data.groupby([\"AtCategory\"])[[\"AtIntercurrence\"]].count()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "g = sn.factorplot(x=\"AtInsurance\", y=\"AtIntercurrence\", data=data, capsize=.2, pallete=\"Y1GnBu_d\", size=14)\n",
+    "g.despine(left=True)\n",
+    "g.set_xticklabels(rotation=60)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "g = sn.factorplot(x=\"AtCategory\", y=\"AtIntercurrence\", data=data, capsize=.2, pallete=\"Y1GnBu_d\", size=14)\n",
+    "g.despine(left=True)\n",
+    "g.set_xticklabels(rotation=60)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "g = sn.factorplot(x=\"AtSpecialty\", y=\"AtIntercurrence\", data=data, capsize=.2, pallete=\"Y1GnBu_d\", size=14, legend=True)\n",
+    "g.despine(left=True)\n",
+    "g.set_xticklabels(rotation=60)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 44,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "{u'alongamento': 0,\n",
+       " u'ap': 1,\n",
+       " u'ap mv': 2,\n",
+       " u'atendimento': 3,\n",
+       " u'beg': 4,\n",
+       " u'cd': 5,\n",
+       " u'conduta': 6,\n",
+       " u'curativo': 7,\n",
+       " u'exerc\\xedcios': 8,\n",
+       " u'fc': 9,\n",
+       " u'mmii': 10,\n",
+       " u'mv': 11,\n",
+       " u'pa': 12,\n",
+       " u'paciente': 13,\n",
+       " u'realizado': 14,\n",
+       " u'realizado curativo': 15}"
+      ]
+     },
+     "execution_count": 44,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from sklearn.feature_extraction.text import CountVectorizer\n",
+    "\n",
+    "vectorizer = CountVectorizer(max_features = 1000, \n",
+    "                             ngram_range=(1, 2), \n",
+    "                             stop_words=frozenset([\"a\",\"à\",\"agora\",\"ainda\",\"alguem\",\"alguém\",\"algum\",\"alguma\",\"algumas\",\"alguns\",\"ampla\",\"amplas\",\"amplo\",\"amplos\",\"ante\",\"antes\",\"ao\",\"aos\",\"apos\",\"após\",\"aquela\",\"aquelas\",\"aquele\",\"aqueles\",\"aquilo\",\"as\",\"ate\",\"até\",\"atraves\",\"através\",\"cada\",\"coisa\",\"coisas\",\"com\",\"como\",\"contra\",\"contudo\",\"da\",\"daquele\",\"daqueles\",\"das\",\"de\",\"dela\",\"delas\",\"dele\",\"deles\",\"depois\",\"dessa\",\"dessas\",\"desse\",\"desses\",\"desta\",\"destas\",\"deste\",\"destes\",\"deve\",\"devem\",\"devendo\",\"dever\",\"devera\",\"deverá\",\"deverao\",\"deverão\",\"deveria\",\"deveriam\",\"devia\",\"deviam\",\"disse\",\"disso\",\"disto\",\"dito\",\"diz\",\"dizem\",\"do\",\"dos\",\"dou\",\"e\",\"é\",\"ela\",\"elas\",\"ele\",\"eles\",\"em\",\"enquanto\", \"entra\",\"entre\",\"era\",\"essa\",\"essas\",\"esse\",\"esses\",\"esta\",\"está\",\"estamos\",\"estao\",\"estão\",\"estas\",\"estava\",\"estavam\",\"estavamos\",\"estávamos\",\"este\",\"estes\",\"estou\",\"eu\",\"fazendo\",\"fazer\",\"feita\",\"feitas\",\"feito\",\"fica\",\"feitos\",\"foi\",\"for\",\"foram\",\"fosse\",\"fossem\",\"grande\",\"grandes\",\"ha\",\"há\",\"isso\",\"isto\",\"ja\",\"já\",\"la\",\"lá\",\"lhe\",\"lhes\",\"lo\",\"mas\",\"me\",\"mesma\",\"mesmas\",\"mesmo\",\"mesmos\",\"meu\",\"meus\",\"minha\",\"minhas\",\"muita\",\"muitas\",\"muito\",\"muitos\",\"na\",\"nao\",\"não\",\"nas\",\"nem\",\"nenhum\",\"nessa\",\"nessas\",\"nesta\",\"nestas\",\"ninguém\",\"no\",\"nos\",\"nós\",\"nossa\",\"nossas\",\"nosso\",\"nossos\",\"num\",\"numa\",\"nunca\",\"o\",\"os\",\"ou\",\"outra\",\"outras\",\"outro\",\"outros\",\"para\",\"pela\",\"pelas\",\"pelo\",\"pelos\",\"pequena\",\"pequenas\",\"per\",\"perante\",\"pode\",\"pôde\",\"podendo\",\"poder\",\"poderia\",\"poderiam\",\"podia\",\"podiam\",\"pois\",\"por\",\"porem\",\"porém\",\"porque\",\"posso\",\"pouca\",\"poucas\",\"pouco\",\"poucos\",\"primeiro\",\"primeiros\",\"propria\",\"própria\",\"proprias\",\"próprias\",\"proprio\",\"próprio\",\"proprios\",\"próprios\",\"quais\",\"qual\",\"quando\",\"quanto\",\"quantos\",\"que\",\"quem\",\"sao\",\"são\",\"se\",\"seja\",\"sejam\",\"sem\",\"sempre\",\"sendo\",\"ser\",\"sera\",\"será\",\"serao\",\"serão\",\"seu\",\"seus\",\"si\",\"sido\",\"so\",\"só\",\"sob\",\"sobre\",\"sua\",\"suas\",\"talvez\",\"tambem\",\"também\",\"tampouco\",\"te\",\"tem\",\"tendo\",\"tenha\",\"ter\",\"teu\",\"teus\",\"ti\",\"tido\",\"tinha\",\"tinham\",\"toda\",\"todas\",\"todavia\",\"todo\",\"todos\",\"tu\",\"tua\",\"tuas\",\"tudo\",\"ultima\",\"última\",\"ultimas\",\"últimas\",\"ultimo\",\"último\",\"ultimos\",\"últimos\",\"um\",\"uma\",\"umas\",\"uns\",\"vendo\",\"ver\",\"vez\",\"vindo\",\"vir\",\"vos\",\"vós\",\"i\",\"ii\",\"iii\",\"iv\",\"v\",\"vi\",\"vii\",\"viii\",\"ix\",\"x\"]),\n",
+    "                             binary=False,\n",
+    "                             max_df = 0.8,\n",
+    "                             min_df = 0.1)\n",
+    "\n",
+    "vectorizer.fit(data['AtEvolution'])\n",
+    "\n",
+    "X = vectorizer.transform(data['AtEvolution'])\n",
+    "\n",
+    "vectorizer.vocabulary_"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 45,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "paciente              85349\n",
+       "realizado             62165\n",
+       "curativo              29084\n",
+       "mmii                  25739\n",
+       "exercícios            25204\n",
+       "mv                    24027\n",
+       "beg                   23090\n",
+       "pa                    21977\n",
+       "cd                    21056\n",
+       "atendimento           20408\n",
+       "alongamento           19568\n",
+       "conduta               19302\n",
+       "ap                    19277\n",
+       "fc                    18976\n",
+       "ap mv                 18196\n",
+       "realizado curativo    17666\n",
+       "dtype: int64"
+      ]
+     },
+     "execution_count": 45,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "docs = pd.DataFrame(X.todense(), columns=vectorizer.get_feature_names())\n",
+    "docs.sum().sort_values()[::-1]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 95,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "from sklearn.ensemble import RandomForestClassifier\n",
+    "\n",
+    "model = RandomForestClassifier(n_estimators = 100)\n",
+    "X = vectorizer.transform(data['AtEvolution'])\n",
+    "y = data['AtIntercurrence']\n",
+    "\n",
+    "from sklearn.cross_validation import cross_val_score\n",
+    "\n",
+    "scores = cross_val_score(model, X, y, scoring='roc_auc',cv = 10)\n",
+    "print('CV AUC {}, Average AUC {}'.format(scores, scores.mean()))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 96,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([ 0.65803525,  0.65601431,  0.68254927,  0.69824149,  0.68091011])"
+      ]
+     },
+     "execution_count": 96,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "scores"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 115,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "from sklearn.model_selection import train_test_split\n",
+    "\n",
+    "trainX, testX, trainY, testY = train_test_split(X, y, train_size=0.75, stratify=y)\n",
+    "print trainX.shape, testX.shape\n",
+    "print trainY.shape, testY.shape"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 106,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "from sklearn.model_selection import GridSearchCV"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 122,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "rf = RandomForestClassifier()\n",
+    "\n",
+    "params = {\n",
+    "    'n_estimators':np.arange(20,120,20),\n",
+    "    'max_depth':[4,5,6,7,8]\n",
+    "}\n",
+    "\n",
+    "gs = GridSearchCV(rf, params, verbose=1, cv=10, n_jobs=-1)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 123,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "GridSearchCV(cv=10, error_score='raise',\n",
+       "       estimator=RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',\n",
+       "            max_depth=None, max_features='auto', max_leaf_nodes=None,\n",
+       "            min_impurity_split=1e-07, min_samples_leaf=1,\n",
+       "            min_samples_split=2, min_weight_fraction_leaf=0.0,\n",
+       "            n_estimators=10, n_jobs=1, oob_score=False, random_state=None,\n",
+       "            verbose=0, warm_start=False),\n",
+       "       fit_params={}, iid=True, n_jobs=-1,\n",
+       "       param_grid={'n_estimators': array([ 20,  40,  60,  80, 100]), 'max_depth': [4, 5, 6, 7, 8]},\n",
+       "       pre_dispatch='2*n_jobs', refit=True, return_train_score=True,\n",
+       "       scoring=None, verbose=1)"
+      ]
+     },
+     "execution_count": 123,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "gs.fit(trainX, trainY)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 124,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',\n",
+       "            max_depth=8, max_features='auto', max_leaf_nodes=None,\n",
+       "            min_impurity_split=1e-07, min_samples_leaf=1,\n",
+       "            min_samples_split=2, min_weight_fraction_leaf=0.0,\n",
+       "            n_estimators=80, n_jobs=1, oob_score=False, random_state=None,\n",
+       "            verbose=0, warm_start=False)"
+      ]
+     },
+     "execution_count": 124,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "gs.best_estimator_"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 125,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.97071227558680684"
+      ]
+     },
+     "execution_count": 125,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "gs.best_score_"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 129,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.97079045837231059"
+      ]
+     },
+     "execution_count": 129,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "gs.best_estimator_.score(testX, testY)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 130,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "predict_y = gs.best_estimator_.predict(testX)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 136,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "from sklearn.metrics import confusion_matrix, classification_report"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 134,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([[41503,     2],\n",
+       "       [ 1247,     8]])"
+      ]
+     },
+     "execution_count": 134,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "confusion_matrix(testY, predict_y)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "print classification_report(testY, predict_y)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "hgj\n"
+     ]
+    }
+   ],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 2",
+   "language": "python",
+   "name": "python2"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 2
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython2",
+   "version": "2.7.13"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
